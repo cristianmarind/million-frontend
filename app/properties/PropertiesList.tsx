@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { List, RowComponentProps } from 'react-window';
+
 import Property from "../src/core/domain/Property";
+import PropertyHeroCard from "../src/components/PropertyHeroCard";
+import PropertyListCard from "../src/components/PropertyListCard";
+
+
 
 export default function PropertiesList({
   properties,
@@ -21,18 +27,28 @@ export default function PropertiesList({
     router.push(`/properties?page=${p}&pageSize=${pageSize}`);
   };
 
+  const Row = ({ index, style }: RowComponentProps) => (
+    <div style={style}>
+      <PropertyListCard property={properties[index + 1]} />
+    </div>
+  );
+
   return (
     <div>
-      <ul className="space-y-2">
-        {properties.map((p) => (
-          <li
-            key={p.name}
-            className="border p-2 rounded-md shadow-sm bg-white"
-          >
-            {p.name}
-          </li>
-        ))}
-      </ul>
+      <div className="container mx-auto p-4">
+        {properties.length > 0 && (
+          <PropertyHeroCard property={properties[0]} />
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <List
+            rowComponent={Row}
+            rowCount={properties.length - 1}
+            rowHeight={600}
+            overscanCount={2}
+            rowProps={{  }}
+          />
+        </div>
+      </div>
 
       <div className="flex justify-between items-center mt-4">
         <button
@@ -58,3 +74,7 @@ export default function PropertiesList({
     </div>
   );
 }
+
+
+
+

@@ -24,10 +24,9 @@ export default class InternalApiClient {
     try {
       const response = await axios.post(`${API_URL}/${endpoint}`, data, config);
 
-      console.log(response.data);
       const responseData: ApiResponse<any> = response.data;
 
-      if (_.get(responseData, 'status') !== 'success') {
+      if (!_.get(responseData, 'success')) {
         throw new Error(responseData.error || 'Error fetching data from API');
       }
 

@@ -7,8 +7,9 @@ export default async function PropertiesPage({
 }: {
   searchParams: { page?: string; pageSize?: string };
 }) {
-  const page = Number(searchParams.page ?? 1);
-  const pageSize = Number(searchParams.pageSize ?? 5);
+  const { page: searchPage, pageSize: searchPageSize } = await searchParams;
+  const page = Number(searchPage ?? 1);
+  const pageSize = Number(searchPageSize ?? 5);
 
   // Aquí llamas tu función server-side
   const properties = await GetPropertiesByFilters.execute({

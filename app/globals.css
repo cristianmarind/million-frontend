@@ -26,3 +26,7 @@ body {
 .wpp-button:hover .wpp-button-msg {
   display: block;
 }
+
+.property-hero-card, .property-list-card {
+  min-height: 50vh;
+}
