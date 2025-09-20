@@ -10,6 +10,9 @@ export interface IGetPropertiesProperties {
     city?: string;
     address?: string;
     name?: string;
+    longitude?: number;
+    latitude?: number;
+    category?: number;
 }
 
 export interface IRepositoryProperties {

@@ -8,39 +8,27 @@ interface PropertyHeroCardProps {
 
 export default function PropertyHeroCard({ property }: PropertyHeroCardProps) {
   return (
-    <div className="property-hero-card bg-white rounded-lg shadow-md overflow-hidden relative">
-      <div className="relative w-full h-64">
-        <Image
-          src={property.imageUrls[0] || '/placeholder.jpg'}
-          alt={property.name}
-          width={600}
-          height={256}
-          style={{ objectFit: 'cover' }}
-          className="absolute"
-          onError={(e) => {
-            const img = e.target as HTMLImageElement;
-            img.src = '/placeholder.jpg'; // Fallback si falla
-          }}
-          loading="lazy" // Carga diferida para mejorar performance
-        />
-      </div>
-      <div className="p-4">
-        <h2 className="text-xl font-bold">{property.name}</h2>
-        <p className="text-gray-600">{property.address}</p>
-        <p className="text-2xl font-semibold mt-2">
+    <div className="property-hero-card bg-white shadow-md overflow-hidden relative">
+      <Image
+        src={property.imageUrls[0] || '/placeholder.jpg'}
+        alt={property.name}
+        width={0} // Set to 0 when using `sizes` and `style` for responsive width
+        height={0} // Set to 0 when using `sizes` and `style` for responsive height
+        sizes="100vw" // Indicates the image will be as wide as the viewport
+        style={{ width: '100%', height: 'auto', objectFit: 'cover', boxShadow: '0 4px 8px rgba(0, 0, 0, 1)' }} // Responsive width and height
+        onError={(e) => {
+          const img = e.target as HTMLImageElement;
+          img.src = '/placeholder.jpg'; // Fallback si falla
+        }}
+        loading="eager"
+      />
+      <div className="absolute bottom-4 right-2 text-black bg-white p-2 rounded-xl">
+        <h2 className="text-md font-bold">{property.name}</h2>
+        <p className="text-sm">{property.address}</p>
+        <p className="text-xl font-semibold mt-2">
           ${property.price.toLocaleString()}
         </p>
       </div>
-      <style jsx>{`
-        .property-hero-card {
-          max-width: 100%;
-        }
-        @media (min-width: 768px) {
-          .property-hero-card {
-            max-width: 600px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

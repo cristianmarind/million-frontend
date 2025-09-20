@@ -10,13 +10,14 @@ const menuItems = [
 
 export default function Header() {
   return (
-    <div className="px-5 pt-1 flex justify-between items-center">
+    <div className="px-5 py-1 flex justify-between items-center">
       <a href="/">
         <Image
           src="/logo.avif"
           alt="Casa moderna en la ciudad"
           width={200}
           height={90}
+          loading="eager"
         />
       </a>
 

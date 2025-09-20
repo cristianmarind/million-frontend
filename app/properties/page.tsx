@@ -1,30 +1,82 @@
 import 'server-only'
-import PropertiesList from "./PropertiesList";
+import { headers } from "next/headers";
+import _ from "lodash";
+
 import { GetPropertiesByFilters } from '../src/core/infraestructure/controllers/PropertiesController';
+import PropertiesList from "./PropertiesList";
+import { getLocationFromIP, getUserIP } from '../src/utils/location';
+import { mapSearchParamsToProperties } from './mappers';
+import { PROPERTY_CATEGORIES } from '../src/common/settings';
+import Property from '../src/core/domain/Property';
+import { uniqByWithPriority } from '../src/utils/arrays';
+
+interface ISearchParams {
+  [key: string]: string | undefined;
+}
 
 export default async function PropertiesPage({
   searchParams,
 }: {
-  searchParams: { page?: string; pageSize?: string };
+  searchParams: Promise<ISearchParams>;
 }) {
-  const { page: searchPage, pageSize: searchPageSize } = await searchParams;
-  const page = Number(searchPage ?? 1);
-  const pageSize = Number(searchPageSize ?? 5);
+  const [
+    searchParamsResolved,
+    headersList
+  ] = await Promise.all([searchParams, headers()]);
 
-  // Aquí llamas tu función server-side
-  const properties = await GetPropertiesByFilters.execute({
-    page,
-    pageSize,
-  });
+
+  const ip = await getUserIP(headersList);
+  const { longitude, latitude } = await getLocationFromIP(ip);
+  console.log({ ip, longitude, latitude });
+  
+  const filters = mapSearchParamsToProperties(searchParamsResolved);
+  let properties: Property[] = []
+
+  // Si se proporciona una categoría válida, filtrar normalmente
+  if (filters.category && PROPERTY_CATEGORIES[filters.category]) {
+    properties = await GetPropertiesByFilters.execute(filters)
+  } else {
+    // Si no se proporciona una categoría o es inválida, 
+    // hace múltiples llamadas para cada categoría a la vez
+    const allCategories = await Promise.all(Object.keys(PROPERTY_CATEGORIES).map(async (categoryKey) => {
+      const categoryNumber = Number(categoryKey);
+      if (categoryNumber === 0 && longitude && latitude) {
+        const nearResult = await GetPropertiesByFilters.execute({
+          ..._.omit(filters, 'category'),
+          longitude,
+          latitude,
+          page: 1,
+          pageSize: 2,
+        });
+
+        console.log({nearResult});
+        
+
+        return nearResult.map(item => ({ ...item, isNear: true }));
+      }
+      
+      const result = await GetPropertiesByFilters.execute({
+        ...filters,
+        category: categoryNumber,
+        page: 1,
+        pageSize: 4,
+      });
+      return result;
+    }));
+
+    properties = uniqByWithPriority(allCategories.flat(), 'name', 'isNear', true);
+  }
+
+
+
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Listado de propiedades</h1>
+    <div>
       <PropertiesList
         properties={properties}
         total={100} // Simulando un total fijo
-        page={page}
-        pageSize={pageSize}
+        page={filters.page}
+        pageSize={filters.pageSize}
       />
     </div>
   );

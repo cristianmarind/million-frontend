@@ -3,6 +3,8 @@ import PropertyTrace from "./PropertyTrace";
 export default interface Property {
     name: string;
     address: string;
+    category: number;
+    isNear?: boolean;
     price: number;
     ownerId: string;
     year: number;

@@ -7,6 +7,7 @@ export function mapProperty(dto: components["schemas"]["PropertyDto"]): Property
   return {
     name: dto.name,
     address: dto.address,
+    category: dto.category,
     price: dto.price,
     ownerId: dto.ownerId,
     year: dto.year,

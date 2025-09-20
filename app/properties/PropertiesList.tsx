@@ -5,7 +5,7 @@ import { List, RowComponentProps } from 'react-window';
 
 import Property from "../src/core/domain/Property";
 import PropertyHeroCard from "../src/components/PropertyHeroCard";
-import PropertyListCard from "../src/components/PropertyListCard";
+import PropertyCategory from "../src/components/PropertyCategory";
 
 
 
@@ -29,27 +29,26 @@ export default function PropertiesList({
 
   const Row = ({ index, style }: RowComponentProps) => (
     <div style={style}>
-      <PropertyListCard property={properties[index + 1]} />
+      <PropertyCategory properties={properties} category={index} />
     </div>
   );
 
   return (
     <div>
-      <div className="container mx-auto p-4">
+      <div className="flex flex-col w-full mb-4">
         {properties.length > 0 && (
           <PropertyHeroCard property={properties[0]} />
         )}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <List
-            rowComponent={Row}
-            rowCount={properties.length - 1}
-            rowHeight={600}
-            overscanCount={2}
-            rowProps={{  }}
-          />
-        </div>
       </div>
-
+      <div className="mt-4 flex justify-center px-5">
+        <List
+          rowComponent={Row}
+          rowCount={3}
+          rowHeight={350}
+          overscanCount={2}
+          rowProps={{}}
+        />
+      </div>
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={() => goToPage(page - 1)}
