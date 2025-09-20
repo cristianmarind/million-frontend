@@ -2,10 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { List, RowComponentProps } from 'react-window';
+import _ from 'lodash';
 
 import Property from "../src/core/domain/Property";
 import PropertyHeroCard from "../src/components/PropertyHeroCard";
 import PropertyCategory from "../src/components/PropertyCategory";
+import { getEnabledCategories } from "../src/utils/propertiesRender";
 
 
 
@@ -22,6 +24,7 @@ export default function PropertiesList({
 }) {
   const router = useRouter();
   const totalPages = Math.ceil(total / pageSize);
+  const enabledCategories = getEnabledCategories(properties);
 
   const goToPage = (p: number) => {
     router.push(`/properties?page=${p}&pageSize=${pageSize}`);
@@ -29,7 +32,7 @@ export default function PropertiesList({
 
   const Row = ({ index, style }: RowComponentProps) => (
     <div style={style}>
-      <PropertyCategory properties={properties} category={index} />
+      <PropertyCategory properties={properties} category={enabledCategories[index]} />
     </div>
   );
 
@@ -43,7 +46,7 @@ export default function PropertiesList({
       <div className="mt-4 flex justify-center px-5">
         <List
           rowComponent={Row}
-          rowCount={3}
+          rowCount={enabledCategories.length}
           rowHeight={350}
           overscanCount={2}
           rowProps={{}}

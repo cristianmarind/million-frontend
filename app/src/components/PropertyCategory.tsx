@@ -62,6 +62,15 @@ export default function PropertyCategory({
     router.push(`/properties?page=1&pageSize=5&category=${category}`);
   };
 
+  const propertiesToRender = properties
+    .filter(p =>
+      p.category === category || (p.isNear && category === 0)
+    );
+
+  if (_.isEmpty(propertiesToRender)) {
+    return null; // Renderizar msg no hay
+  }
+
   return (
     <div className="property-category w-full">
       <div className="flex justify-between items-center mb-1 px-2">
@@ -82,10 +91,7 @@ export default function PropertyCategory({
         {...SLIDER_SETTINGS}
       >
         {
-          properties
-            .filter(p =>
-              p.category === category || (p.isNear && category === 0)
-            )
+          propertiesToRender
             .map((property) => (
               <div key={property.name}>
                 <PropertyListCard property={property} />

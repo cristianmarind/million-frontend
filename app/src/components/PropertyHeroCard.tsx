@@ -15,7 +15,8 @@ export default function PropertyHeroCard({ property }: PropertyHeroCardProps) {
         width={0} // Set to 0 when using `sizes` and `style` for responsive width
         height={0} // Set to 0 when using `sizes` and `style` for responsive height
         sizes="100vw" // Indicates the image will be as wide as the viewport
-        style={{ width: '100%', height: 'auto', objectFit: 'cover', boxShadow: '0 4px 8px rgba(0, 0, 0, 1)' }} // Responsive width and height
+        className="hero-card-image"
+        style={{ width: '100%', height: 'auto', maxHeight: '70vh', objectFit: 'cover', objectPosition: 'center', boxShadow: '0 4px 8px rgba(0, 0, 0, 1)' }} // Responsive width and height
         onError={(e) => {
           const img = e.target as HTMLImageElement;
           img.src = '/placeholder.jpg'; // Fallback si falla
