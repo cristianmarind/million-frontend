@@ -24,10 +24,8 @@ export default async function PropertiesPage({
     headersList
   ] = await Promise.all([searchParams, headers()]);
 
-
   const ip = await getUserIP(headersList);
   const { longitude, latitude } = await getLocationFromIP(ip);
-  console.log({ ip, longitude, latitude });
   
   const filters = mapSearchParamsToProperties(searchParamsResolved);
   let properties: Property[] = []
@@ -48,9 +46,6 @@ export default async function PropertiesPage({
           page: 1,
           pageSize: 2,
         });
-
-        console.log({nearResult});
-        
 
         return nearResult.map(item => ({ ...item, isNear: true }));
       }

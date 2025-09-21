@@ -24,9 +24,9 @@ export default function PropertyListCard({ property }: PropertyListCardProps) {
         loading="lazy" // Carga diferida
       />
       <Card.Body className="p-3 text-dark">
-        <Card.Title className="h6 fw-semibold">{property.name}</Card.Title>
+        <Card.Title className="h6 fw-semibold text-truncate">{property.name}</Card.Title>
         <Card.Text className="small text-muted text-truncate">{property.address}</Card.Text>
-        <Card.Text className="small fw-medium mt-1 mb-0">
+        <Card.Text className="small fw-medium">
           ${property.price.toLocaleString()}
         </Card.Text>
       </Card.Body>

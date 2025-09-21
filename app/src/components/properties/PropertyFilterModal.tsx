@@ -7,7 +7,7 @@ import 'rc-slider/assets/index.css';
 import _ from 'lodash'; // Optional
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE, PROPERTY_FILTER_CONTEXT, useFilters } from '../../state/FiltersContext';
 
-interface FilterFormData {
+export interface FilterFormData {
   propertyName: string;
   propertyAddress: string;
   propertyPrice: [number, number];
@@ -36,16 +36,13 @@ const PropertyFilterModal = ({
     const propertyAddress = _.trim(data.propertyAddress) || undefined
     const minPrice = data.propertyPrice[0] > 0 ? data.propertyPrice[0] : undefined
     const maxPrice = data.propertyPrice[1] < DEFAULT_MAX_PRICE ? data.propertyPrice[1] : undefined
-    const values: any = {};
+    const values: any = {
+      propertyName: propertyName,
+      propertyAddress: propertyAddress,
+      propertyPrice: [minPrice, maxPrice]
+    };
 
-    if (propertyName) values.propertyName = propertyName;
-    if (propertyAddress) values.propertyAddress = propertyAddress;
-    if (minPrice || (maxPrice && maxPrice !== DEFAULT_MAX_PRICE)) {
-      values.propertyPrice = [minPrice, maxPrice];
-    }
-
-    const filtersx = updateFiltersByContext(PROPERTY_FILTER_CONTEXT, values)
-    console.log('Filters Applied:', JSON.stringify(filtersx)); // Trigger fetch or other actions
+    updateFiltersByContext(PROPERTY_FILTER_CONTEXT, values)
   };
 
   const handleClear = () => {

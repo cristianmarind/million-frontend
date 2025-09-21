@@ -15,7 +15,6 @@ export const getLocationFromIP = async (ip: string) => {
   try {
     const res = await fetch(`https://ipapi.co/${ip}/json/`);
     const data = await res.json();
-    console.log({x: process.env.NODE_ENV, data});
     
     if (process.env.NODE_ENV === "development") {
       if (!data.location) {

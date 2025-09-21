@@ -15,11 +15,13 @@ export interface FilterItem {
   value: any;
   context: string;
   persist?: boolean;
+  defaultValue?: any;
 }
 
 export interface FiltersContextType {
   filters: FilterItem[];
   updateFiltersByContext: (context: string, updates: Record<string, any>, omitVoidValues?: boolean) => any;
+  clearFilersByContext: (context: string) => void;
 }
 
 interface IdsFilterItem {
@@ -27,29 +29,45 @@ interface IdsFilterItem {
   context: string;
 }
 
+interface FilterFormData {
+  propertyName?: string;
+  propertyAddress?: string;
+  propertyPrice?: [number, number]; // [minPrice, maxPrice]
+}
+
+interface QueryParams {
+  name?: string;
+  address?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
+
 const FiltersContext = createContext<FiltersContextType | undefined>(undefined);
 
 export const PROPERTY_FILTER_CONTEXT = "propertiesFilter"
 export const DEFAULT_MIN_PRICE = 0;
 export const DEFAULT_MAX_PRICE = 10000000;
-export const DEFAULT_FILTER_ITEMS = [
+export const DEFAULT_FILTER_ITEMS: FilterItem[] = [
   {
     key: 'propertyName',
     value: "",
     context: PROPERTY_FILTER_CONTEXT,
     persist: true,
+    defaultValue: ""
   },
   {
     key: 'propertyAddress',
     value: "",
     context: PROPERTY_FILTER_CONTEXT,
     persist: true,
+    defaultValue: ""
   },
   {
     key: 'propertyPrice',
     value: [DEFAULT_MIN_PRICE, DEFAULT_MAX_PRICE],
     context: PROPERTY_FILTER_CONTEXT,
     persist: true,
+    defaultValue: [DEFAULT_MIN_PRICE, DEFAULT_MAX_PRICE]
   }
 ]
 
@@ -78,6 +96,28 @@ export const mergeFilters = (priorityFilters: FilterItem[], secondaryFilters: Fi
   return _.values(mergedObj);
 }
 
+export function mapFormDataToQuery(formData: FilterFormData): QueryParams {
+  return {
+    name: formData.propertyName,
+    address: formData.propertyAddress,
+    minPrice: _.defaultTo(_.get(formData.propertyPrice, '0'), undefined),
+    maxPrice: _.defaultTo(_.get(formData.propertyPrice, '1'), undefined),
+  };
+}
+
+export function mapQueryToFormData(query: QueryParams): FilterFormData {
+  let propertyPrice: [number, number] | undefined = undefined;
+  if (typeof query.minPrice === "number" && typeof query.maxPrice === "number") {
+    propertyPrice = [query.minPrice, query.maxPrice];
+  }
+
+  return {
+    propertyName: query.name,
+    propertyAddress: query.address,
+    ...(propertyPrice !== undefined ? { propertyPrice } : {}),
+  };
+}
+
 const getStoredFilterValues = (filters: FilterItem[]): FilterItem[] => {
   const storedFilters = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (storedFilters) {
@@ -87,16 +127,10 @@ const getStoredFilterValues = (filters: FilterItem[]): FilterItem[] => {
   return filters
 }
 
+const DEFAULT_FILTER_ITEMS_STORED = getStoredFilterValues(DEFAULT_FILTER_ITEMS);
+
 export const FilterProvider = ({ children }: { children: ReactNode }) => {
-  const [filters, setFilters] = useState<FilterItem[]>(DEFAULT_FILTER_ITEMS);
-
-  useEffect(() => {
-    const storedFilters = getStoredFilterValues(filters);
-
-    if (storedFilters) {
-      setFilters(storedFilters);
-    }
-  }, []);
+  const [filters, setFilters] = useState<FilterItem[]>(DEFAULT_FILTER_ITEMS_STORED);
 
   const updateFiltersByContext = (
     context: string,
@@ -126,11 +160,28 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
     return getFiltersValuesFilters(filteredItems, omitVoidValues);
   };
 
+  const clearFilersByContext = (context: string) => {
+    let newFilters: typeof filters = [];
+
+    setFilters((prev) => {
+      newFilters = prev.map((f) => {
+        if (f.context === context) return { ...f, value: f.defaultValue || "" };
+
+        return f;
+      });
+
+      return newFilters;
+    });
+    const persisted = newFilters.filter((f) => f.persist);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persisted));
+  }
+
   return (
     <FiltersContext.Provider
       value={{
         filters,
-        updateFiltersByContext
+        updateFiltersByContext,
+        clearFilersByContext
       }}
     >
       {children}
