@@ -26,19 +26,19 @@ const settings = {
   ],
 };
 
-export default function Header() {
+export default function Footer() {
   return (
     <div className="pb-5">
       <div className="text-center">
         {settings.companyName}
       </div>
-      <div className="flex justify-center">
+      <div className="d-flex justify-content-center">
         <nav>
-          <ul className="flex gap-10 mt-2">
+          <ul className="d-flex gap-4 mt-2 list-unstyled">
             {
               settings.basicInfo.map((item) => (
-                <li key={item.label} className="flex">
-                  <item.icon className="w-5 h-5 text-gray-600 mr-1" />
+                <li key={item.label} className="d-flex align-items-center">
+                  <item.icon className="me-2" style={{ width: '20px', height: '20px' }} />
                   {item.value}
                 </li>
               ))
@@ -46,14 +46,14 @@ export default function Header() {
           </ul>
         </nav>
       </div>
-      <div className="flex justify-center">
+      <div className="d-flex justify-content-center">
         <nav>
-          <ul className="flex gap-10 mt-2">
+          <ul className="d-flex gap-4 mt-2 list-unstyled">
             {
               settings.socialNetworks.map((item) => (
-                <li key={item.label} className="flex">
-                  <a href={item.href} target="_blank" rel="noopener noreferrer">
-                    <item.icon className="w-5 h-5 text-gray-600 mr-1" />
+                <li key={item.label} className="d-flex align-items-center">
+                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                    <item.icon style={{ width: '20px', height: '20px' }} />
                   </a>
                 </li>
               ))

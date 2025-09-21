@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
-import Header from "./src/components/Header";
-import Footer from "./src/components/Footer";
-import WhatsAppButton from "./src/components/WhatsAppButton";
-
+import Header from "./src/components/generals/Header";
+import Footer from "./src/components/generals/Footer";
+import WhatsAppButton from "./src/components/generals/WhatsAppButton";
 import "./globals.css";
+import { FilterProvider } from "./src/state/FiltersContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,10 +35,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header /> 
-        {children}
-        <Footer />
-        <WhatsAppButton />
+        <FilterProvider>
+          <Header />
+          {children}
+          <Footer />
+          <WhatsAppButton />
+        </FilterProvider>
+
       </body>
     </html>
   );

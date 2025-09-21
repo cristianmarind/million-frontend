@@ -1,6 +1,7 @@
 // src/presentation/components/properties/PropertyHeroCard.tsx
 import Image from 'next/image';
-import Property from '../core/domain/Property';
+import Card from 'react-bootstrap/Card';
+import Property from '../../core/domain/Property';
 
 interface PropertyHeroCardProps {
   property: Property;
@@ -8,7 +9,7 @@ interface PropertyHeroCardProps {
 
 export default function PropertyHeroCard({ property }: PropertyHeroCardProps) {
   return (
-    <div className="property-hero-card bg-white shadow-md overflow-hidden relative">
+    <Card className="property-hero-card bg-white shadow overflow-hidden position-relative border-0">
       <Image
         src={property.imageUrls[0] || '/placeholder.jpg'}
         alt={property.name}
@@ -23,13 +24,13 @@ export default function PropertyHeroCard({ property }: PropertyHeroCardProps) {
         }}
         loading="eager"
       />
-      <div className="absolute bottom-4 right-2 text-black bg-white p-2 rounded-xl">
-        <h2 className="text-md font-bold">{property.name}</h2>
-        <p className="text-sm">{property.address}</p>
-        <p className="text-xl font-semibold mt-2">
+      <Card.Body className="position-absolute bottom-0 end-0 text-dark bg-white p-3 rounded-3 m-3">
+        <Card.Title className="h6 fw-bold mb-1">{property.name}</Card.Title>
+        <Card.Text className="small mb-1">{property.address}</Card.Text>
+        <Card.Text className="h5 fw-semibold mb-0">
           ${property.price.toLocaleString()}
-        </p>
-      </div>
-    </div>
+        </Card.Text>
+      </Card.Body>
+    </Card>
   );
 }

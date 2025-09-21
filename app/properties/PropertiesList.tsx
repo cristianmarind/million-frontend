@@ -5,8 +5,8 @@ import { List, RowComponentProps } from 'react-window';
 import _ from 'lodash';
 
 import Property from "../src/core/domain/Property";
-import PropertyHeroCard from "../src/components/PropertyHeroCard";
-import PropertyCategory from "../src/components/PropertyCategory";
+import PropertyHeroCard from "../src/components/properties/PropertyHeroCard";
+import PropertyCategory from "../src/components/properties/PropertyCategory";
 import { getEnabledCategories } from "../src/utils/propertiesRender";
 
 
@@ -38,12 +38,15 @@ export default function PropertiesList({
 
   return (
     <div>
-      <div className="flex flex-col w-full mb-4">
+      <div className="d-flex flex-column w-100 mb-4">
         {properties.length > 0 && (
           <PropertyHeroCard property={properties[0]} />
         )}
       </div>
-      <div className="mt-4 flex justify-center px-5">
+      <div>
+
+      </div>
+      <div className="mt-4 d-flex justify-content-center px-5">
         <List
           rowComponent={Row}
           rowCount={enabledCategories.length}
@@ -52,11 +55,11 @@ export default function PropertiesList({
           rowProps={{}}
         />
       </div>
-      <div className="flex justify-between items-center mt-4">
+      <div className="d-flex justify-content-between align-items-center mt-4">
         <button
           onClick={() => goToPage(page - 1)}
           disabled={page <= 1}
-          className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+          className="btn btn-outline-secondary px-3 py-1"
         >
           Anterior
         </button>
@@ -68,7 +71,7 @@ export default function PropertiesList({
         <button
           onClick={() => goToPage(page + 1)}
           disabled={page >= totalPages}
-          className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+          className="btn btn-outline-secondary px-3 py-1"
         >
           Siguiente
         </button>

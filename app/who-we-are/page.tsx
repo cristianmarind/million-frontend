@@ -1,7 +1,10 @@
 export default function WhoWeArePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      WhoWeArePage
+    <div className="min-vh-100 d-flex align-items-center justify-content-center p-4 p-md-5">
+      <div className="text-center">
+        <h1 className="h2 fw-bold mb-3">Who We Are</h1>
+        <p className="lead">Learn more about our company</p>
+      </div>
     </div>
   );
 }

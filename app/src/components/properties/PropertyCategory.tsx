@@ -6,9 +6,9 @@ import Slider, { Settings } from "react-slick";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
 
-import Property from "../core/domain/Property";
+import Property from "../../core/domain/Property";
 import PropertyListCard from "./PropertyListCard";
-import { PROPERTY_CATEGORIES } from "../common/settings";
+import { PROPERTY_CATEGORIES } from "../../common/settings";
 
 
 const SLIDER_SETTINGS: Settings = {
@@ -72,16 +72,16 @@ export default function PropertyCategory({
   }
 
   return (
-    <div className="property-category w-full">
-      <div className="flex justify-between items-center mb-1 px-2">
-        <span onClick={goToCategoryPage} className="text-2xl font-bold cursor-pointer">
+    <div className="property-category w-100">
+      <div className="d-flex justify-content-between align-items-center mb-1 px-2">
+        <span onClick={goToCategoryPage} className="h3 fw-bold" style={{ cursor: 'pointer' }}>
           {PROPERTY_CATEGORIES[category].name || 'Propiedades'}
         </span>
         <div>
-          <button className="button cursor-pointer mr-3 bg-gray-50 rounded-sm" onClick={goToPreviousSlide}>
+          <button className="btn btn-light me-3" onClick={goToPreviousSlide} style={{ cursor: 'pointer' }}>
             <ChevronLeft size={20} color="black" />
           </button>
-          <button className="button cursor-pointer bg-gray-50 rounded-sm" onClick={goToNextSlide}>
+          <button className="btn btn-light" onClick={goToNextSlide} style={{ cursor: 'pointer' }}>
             <ChevronRight size={20} color="black" />
           </button>
         </div>

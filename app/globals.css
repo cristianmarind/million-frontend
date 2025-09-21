@@ -1,6 +1,6 @@
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
-@import "tailwindcss";
+@import "bootstrap/dist/css/bootstrap.min.css";
 
 
 :root {
@@ -27,6 +27,7 @@ body {
 
 .wpp-button:hover {
   width: 10em;
+  background-color: #25d366 !important;
 }
 
 .wpp-button:hover .wpp-button-msg {

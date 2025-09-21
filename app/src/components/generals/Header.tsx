@@ -10,8 +10,8 @@ const menuItems = [
 
 export default function Header() {
   return (
-    <div className="px-5 py-1 flex justify-between items-center">
-      <a href="/">
+    <div className="px-4 py-2 d-flex justify-content-between align-items-center">
+      <Link href="/">
         <Image
           src="/logo.avif"
           alt="Casa moderna en la ciudad"
@@ -19,20 +19,17 @@ export default function Header() {
           height={90}
           loading="eager"
         />
-      </a>
-
-
+      </Link>
+      
       <nav>
-        <ul className="flex gap-10 mt-2">
-          {
-            menuItems.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href}>
-                  {item.label}
-                </Link>
-              </li>
-            ))
-          }
+        <ul className="d-flex gap-4 mt-2 list-unstyled mb-0">
+          {menuItems.map((item) => (
+            <li key={item.href}>
+              <Link href={item.href} className="text-decoration-none">
+                {item.label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
     </div>
