@@ -48,3 +48,17 @@ body {
   margin-left: 0;
   margin-right: 0;
 }
+
+.btn-properties-filter {
+  position: sticky;
+  top: 20px;
+  z-index: 100;
+  width: fit-content;
+}
+
+.btn-properties-filter button {
+  padding: .5em 1em 0.5em 1.5em;
+  border-width: thin;
+  border-color: black;
+  border-radius: 1em;
+}

@@ -1,13 +1,16 @@
 "use client";
-
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { List, RowComponentProps } from 'react-window';
 import _ from 'lodash';
+import { SlidersHorizontal } from 'lucide-react';
 
 import Property from "../src/core/domain/Property";
 import PropertyHeroCard from "../src/components/properties/PropertyHeroCard";
 import PropertyCategory from "../src/components/properties/PropertyCategory";
 import { getEnabledCategories } from "../src/utils/propertiesRender";
+import { Button } from "react-bootstrap";
+import PropertyFilterModal from "../src/components/properties/PropertyFilterModal";
 
 
 
@@ -23,6 +26,8 @@ export default function PropertiesList({
   pageSize: number;
 }) {
   const router = useRouter();
+  const [openFilters, setOpenFilters] = useState(false);
+
   const totalPages = Math.ceil(total / pageSize);
   const enabledCategories = getEnabledCategories(properties);
 
@@ -43,10 +48,21 @@ export default function PropertiesList({
           <PropertyHeroCard property={properties[0]} />
         )}
       </div>
-      <div>
-
+      <div className="px-5">
+        
+        <div>BADGES</div>
       </div>
-      <div className="mt-4 d-flex justify-content-center px-5">
+      <div>
+        <div className="btn-properties-filter">
+          <Button variant="light" onClick={() => setOpenFilters(!openFilters)}>
+            <SlidersHorizontal style={{ width: '20px', height: '20px' }} />
+            {
+              " "
+            }
+            <span>Filtros</span>
+          </Button>
+        </div>
+        <div className="mt-4 px-5">
         <List
           rowComponent={Row}
           rowCount={enabledCategories.length}
@@ -55,6 +71,8 @@ export default function PropertiesList({
           rowProps={{}}
         />
       </div>
+      </div>
+      
       <div className="d-flex justify-content-between align-items-center mt-4">
         <button
           onClick={() => goToPage(page - 1)}
@@ -76,6 +94,7 @@ export default function PropertiesList({
           Siguiente
         </button>
       </div>
+      <PropertyFilterModal show={openFilters} onClose={() => setOpenFilters(false)} />
     </div>
   );
 }

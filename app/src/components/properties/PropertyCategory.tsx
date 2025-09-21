@@ -73,7 +73,7 @@ export default function PropertyCategory({
 
   return (
     <div className="property-category w-100">
-      <div className="d-flex justify-content-between align-items-center mb-1 px-2">
+      <div className="d-flex justify-content-between align-items-center mb-1">
         <span onClick={goToCategoryPage} className="h3 fw-bold" style={{ cursor: 'pointer' }}>
           {PROPERTY_CATEGORIES[category].name || 'Propiedades'}
         </span>
