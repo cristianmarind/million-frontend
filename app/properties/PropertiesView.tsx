@@ -30,16 +30,10 @@ function toQueryParams(obj: Record<string, any>) {
 }
 
 
-export default function PropertiesList({
-  properties,
-  total,
-  page,
-  pageSize,
+export default function PropertiesView({
+  properties
 }: {
   properties: Property[];
-  total: number;
-  page: number;
-  pageSize: number;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams()
@@ -49,7 +43,6 @@ export default function PropertiesList({
   const [openFilters, setOpenFilters] = useState(false);
   const [currentFilters, setCurrentFilters] = useState({});
 
-  const totalPages = Math.ceil(total / pageSize);
   const enabledCategories = getEnabledCategories(properties);
 
   useEffect(() => {
@@ -74,7 +67,7 @@ export default function PropertiesList({
 
   const goToPage = (p: number, params: any = {}) => {
     const queryParams = toQueryParams(params)
-    router.push(`/properties?page=${p}&pageSize=${pageSize}&${queryParams}`);
+    router.push(`/properties?${queryParams}`);
   };
 
   const Row = ({ index, style }: RowComponentProps) => (
@@ -109,7 +102,7 @@ export default function PropertiesList({
           <List
             rowComponent={Row}
             rowCount={enabledCategories.length}
-            rowHeight={350}
+            rowHeight={400}
             overscanCount={2}
             rowProps={{}}
           />

@@ -4,7 +4,7 @@ import _ from "lodash";
 import BPromise from 'bluebird';
 
 import { GetPropertiesByFilters } from '../src/core/infraestructure/controllers/PropertiesController';
-import PropertiesList from "./PropertiesList";
+import PropertiesList from "./PropertiesView";
 import { getLocationFromIP, getUserIP } from '../src/utils/location';
 import { mapSearchParamsToProperties } from './mappers';
 import { PROPERTY_CATEGORIES } from '../src/common/settings';
@@ -70,9 +70,6 @@ export default async function PropertiesPage({
     <div>
       <PropertiesList
         properties={properties}
-        total={100} // Simulando un total fijo
-        page={filters.page}
-        pageSize={filters.pageSize}
       />
     </div>
   );

@@ -72,12 +72,14 @@ export default function PropertyCategory({
   }
 
   return (
-    <div className="property-category w-100">
-      <div className="d-flex justify-content-between align-items-center mb-1">
-        <span onClick={goToCategoryPage} className="h3 fw-bold" style={{ cursor: 'pointer' }}>
-          {PROPERTY_CATEGORIES[category].name || 'Propiedades'}
-        </span>
-        <div>
+    <div className="property-category container w-100">
+      <div className="row justify-content-between">
+        <div className="col-12 col-sm-8 d-flex align-items-center mb-1 mt-2">
+          <span onClick={goToCategoryPage} className="h3 fw-bold mb-0 text-truncate" style={{ cursor: 'pointer' }}>
+            {PROPERTY_CATEGORIES[category].name || 'Propiedades'}
+          </span>
+        </div>
+        <div className="col-12 col-sm-4 d-flex justify-content-between justify-content-sm-end align-items-center mb-1 mt-2">
           <button className="btn btn-light me-3" onClick={goToPreviousSlide} style={{ cursor: 'pointer' }}>
             <ChevronLeft size={20} color="black" />
           </button>

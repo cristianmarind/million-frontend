@@ -68,7 +68,7 @@ const PropertyFilterModal = ({
       <Modal.Header closeButton className="py-2 border-bottom-0">
         <Modal.Title>Encuentra el lugar de tus sueños</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="px-5">
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
             <Form.Label className="fw-bold">Nombre</Form.Label>

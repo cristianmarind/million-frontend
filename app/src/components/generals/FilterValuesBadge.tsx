@@ -38,9 +38,10 @@ export default function FilterValuesBadge({
   
   const currentFilters: Partial<FilterFormDataStrings> = contextFilter.reduce((accum, item) => {
     if (Array.isArray(item.value)) {
-      if (_.every(item.value, _.isNil)) {
+      if (_.every(item.value, _.isNil) || _.isEqual(item.value, item.defaultValue)) {
         return accum;
       }
+      
       return {
         ...accum,
         [item.key]: item.value.join(" - "),

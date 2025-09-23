@@ -24,15 +24,15 @@ export default function PropertyListCard({ property }: PropertyListCardProps) {
       <Image
         src={property.imageUrls[0] || '/placeholder.jpg'}
         alt={property.name}
-        width={300}// requerido por Next.js (no define el render final)
-        height={192}
+        width={300}
+        height={160}
         className="w-100"
-        style={{ height: '10em', objectFit: 'cover' }}
+        style={{ objectFit: 'cover' }}
         onError={(e) => {
           const img = e.target as HTMLImageElement;
-          img.src = '/placeholder.jpg'; // Fallback si falla
+          img.src = '/placeholder.jpg';
         }}
-        loading="lazy" // Carga diferida
+        loading="lazy"
       />
       <Card.Body className="p-3 text-dark">
         <Card.Title className="h6 fw-semibold text-truncate">{property.name}</Card.Title>

@@ -106,12 +106,21 @@ export const mergeFilters = (priorityFilters: FilterItem[], secondaryFilters: Fi
 }
 
 export function mapFormDataToQuery(formData: FilterFormData): QueryParams {
-  return {
+  const query: QueryParams = {
     name: formData.propertyName,
-    address: formData.propertyAddress,
-    minPrice: _.defaultTo(_.get(formData.propertyPrice, '0'), undefined),
-    maxPrice: _.defaultTo(_.get(formData.propertyPrice, '1'), undefined),
-  };
+    address: formData.propertyAddress
+  }
+  const minPrice = _.defaultTo(_.get(formData.propertyPrice, '0'), undefined)
+  const maxPrice = _.defaultTo(_.get(formData.propertyPrice, '1'), undefined)
+
+  if (_.isNumber(minPrice) && minPrice && minPrice !== DEFAULT_MIN_PRICE) {
+    query.minPrice = minPrice
+  }
+  if (_.isNumber(maxPrice) && maxPrice && maxPrice !== DEFAULT_MAX_PRICE) {
+    query.maxPrice = maxPrice
+  }
+
+  return query
 }
 
 export function mapQueryToFormData(query: QueryParams): FilterFormData {
