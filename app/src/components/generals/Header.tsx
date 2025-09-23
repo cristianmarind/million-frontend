@@ -30,7 +30,6 @@ export default function Header() {
       const query = mapFormDataToQuery(newCurrentFilter)
       if (!_.isEmpty(query)) {
         const queryParams = toQueryParams(query)
-        console.log({queryParams});
         
         router.push(`/properties?${queryParams}`);
         return
@@ -48,10 +47,11 @@ export default function Header() {
             <Image
               src="/logo.avif"
               alt="Casa moderna en la ciudad"
-              width={200}
-              height={90}
               loading="eager"
-              className="h-auto"
+              width={0}
+              height={0}
+              sizes="200px"
+              style={{ width: "200px", height: "auto" }} 
             />
           </Link>
         </div>

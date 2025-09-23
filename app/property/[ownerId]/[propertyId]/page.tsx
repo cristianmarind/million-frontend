@@ -1,7 +1,6 @@
 import 'server-only'
 import { notFound } from 'next/navigation';
 import _ from "lodash";
-import Carousel from 'react-bootstrap/Carousel';
 
 import { GetOwnersByFilters } from '@/app/src/core/infraestructure/controllers/OwnersController';
 import { GetPropertiesByFilters } from '@/app/src/core/infraestructure/controllers/PropertiesController';

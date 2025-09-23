@@ -1,34 +1,28 @@
 import 'server-only'
-import { headers } from "next/headers";
 import _ from "lodash";
 import BPromise from 'bluebird';
 
 import { GetPropertiesByFilters } from '../src/core/infraestructure/controllers/PropertiesController';
 import PropertiesList from "./PropertiesView";
-import { getLocationFromIP, getUserIP } from '../src/utils/location';
 import { mapSearchParamsToProperties } from './mappers';
 import { PROPERTY_CATEGORIES } from '../src/common/settings';
 import Property from '../src/core/domain/Property';
 import { uniqByWithPriority } from '../src/utils/arrays';
 
+export const dynamicParams = true;
+export const revalidate = 3600;
+
 interface ISearchParams {
   [key: string]: string | undefined;
 }
-
 export default async function PropertiesPage({
   searchParams,
 }: {
   searchParams: Promise<ISearchParams>;
 }) {
-  const [
-    searchParamsResolved,
-    headersList
-  ] = await Promise.all([searchParams, headers()]);
-
-  const ip = await getUserIP(headersList);
-  const { longitude, latitude } = await getLocationFromIP(ip);
-  
+  const searchParamsResolved = await searchParams;
   const filters = mapSearchParamsToProperties(searchParamsResolved);
+
   let properties: Property[] = []
 
   // Si se proporciona una categoría válida, filtrar normalmente
@@ -39,16 +33,8 @@ export default async function PropertiesPage({
     // hace múltiples llamadas para cada categoría a la vez
     const allCategories = await BPromise.map(Object.keys(PROPERTY_CATEGORIES), async (categoryKey: string) => {
       const categoryNumber = Number(categoryKey);
-      if (categoryNumber === 0 && longitude && latitude) {
-        const nearResult = await GetPropertiesByFilters.execute({
-          ..._.omit(filters, 'category'),
-          longitude,
-          latitude,
-          page: 1,
-          pageSize: 2,
-        });
-
-        return nearResult.map((item: Property) => ({ ...item, isNear: true }));
+      if (categoryNumber === 0) {
+        return null
       }
       
       const result = await GetPropertiesByFilters.execute({
@@ -59,12 +45,9 @@ export default async function PropertiesPage({
       });
       return result;
     }, { concurrency: 3 });
-
-    properties = uniqByWithPriority(allCategories.flat(), 'name', 'isNear', true);
+    
+    properties = uniqByWithPriority(allCategories.flat().filter((p) => !_.isNil(p)), 'name', 'isNear', true);
   }
-
-
-
 
   return (
     <div>

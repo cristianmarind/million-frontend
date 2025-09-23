@@ -15,25 +15,27 @@ export default function PropertyListCard({ property }: PropertyListCardProps) {
   const goToPropertyPage = () => {
     router.push(`/property/${property.ownerId}/${property.id}`);
   };
-  
+
   return (
     <Card
-      className="property-list-card bg-white shadow-sm overflow-hidden d-flex flex-column mx-2 cursor-pointer"
+      className="bg-white shadow-sm overflow-hidden d-flex flex-column mx-2 cursor-pointer"
+
       onClick={goToPropertyPage}
     >
-      <Image
-        src={property.imageUrls[0] || '/placeholder.jpg'}
-        alt={property.name}
-        width={300}
-        height={160}
-        className="w-100"
-        style={{ objectFit: 'cover' }}
-        onError={(e) => {
-          const img = e.target as HTMLImageElement;
-          img.src = '/placeholder.jpg';
-        }}
-        loading="lazy"
-      />
+      <div style={{ position: "relative", width: "100%", height: "160px" }}>
+        <Image
+          src={property.imageUrls[0] || '/placeholder.jpg'}
+          alt={property.name}
+          fill
+          sizes="300px"
+          style={{ objectFit: 'cover' }}
+          onError={(e) => {
+            const img = e.target as HTMLImageElement;
+            img.src = '/placeholder.jpg';
+          }}
+
+        />
+      </div>
       <Card.Body className="p-3 text-dark">
         <Card.Title className="h6 fw-semibold text-truncate">{property.name}</Card.Title>
         <Card.Text className="small text-muted text-truncate">{property.address}</Card.Text>

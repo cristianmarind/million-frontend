@@ -14,6 +14,7 @@ import PropertyFilterModal from "../src/components/properties/PropertyFilterModa
 import { DEFAULT_MAX_PRICE, FilterFormData, mapFormDataToQuery, mapQueryToFormData, PROPERTY_FILTER_CONTEXT, useFilters } from "../src/state/FiltersContext";
 import EmptyListMessage from "../src/components/generals/EmptyListMessage";
 import FilterValuesBadge from "../src/components/generals/FilterValuesBadge";
+import PropertiesNear from "../src/components/properties/PropertiesNear";
 
 export function toQueryParams(obj: Record<string, any>) {
   let availibleFilters: any = {}
@@ -72,7 +73,12 @@ export default function PropertiesView({
 
   const Row = ({ index, style }: RowComponentProps) => (
     <div style={style}>
-      <PropertyCategory properties={properties} category={enabledCategories[index]} />
+      {
+        <PropertyCategory
+          properties={properties}
+          category={enabledCategories[index + 1]}
+        />
+      }
     </div>
   );
 
@@ -99,9 +105,12 @@ export default function PropertiesView({
           </Button>
         </div>
         <div className="mt-4 px-5">
+          <div className="mb-5">
+            <PropertiesNear />
+          </div>
           <List
             rowComponent={Row}
-            rowCount={enabledCategories.length}
+            rowCount={enabledCategories.length - 1}
             rowHeight={400}
             overscanCount={1}
             rowProps={{}}
