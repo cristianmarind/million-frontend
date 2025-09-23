@@ -70,7 +70,7 @@ export default function FilterValuesBadge({
         <div className="d-flex flex-wrap">
           {
             Object.keys(currentFilters).map((filterKey) => (
-              <Badge bg="dark" className="d-flex align-items-center justify-content-between text-light me-2 p-2 cursor-pointer">
+              <Badge key={filterKey} bg="dark" className="d-flex align-items-center justify-content-between text-light me-2 p-2 cursor-pointer">
                 <span className="me-2">{LABEL_BY_KEY[filterKey as keyof typeof LABEL_BY_KEY]}:</span>
                 <span>{currentFilters[filterKey as keyof FilterFormDataStrings]}</span>
                 <X className="ms-2" style={{ width: '10px', height: '10px' }} onClick={() => clearFilerItemByContext(context, filterKey)} />

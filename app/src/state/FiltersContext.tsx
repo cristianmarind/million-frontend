@@ -8,6 +8,7 @@ import {
 import _ from 'lodash';
 
 const LOCAL_STORAGE_KEY = 'persistedFilters';
+const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
 
 export interface FilterItem {
   key: string;
@@ -137,18 +138,21 @@ export function mapQueryToFormData(query: QueryParams): FilterFormData {
 }
 
 const getStoredFilterValues = (filters: FilterItem[]): FilterItem[] => {
-  const storedFilters = localStorage.getItem(LOCAL_STORAGE_KEY);
-  if (storedFilters) {
-    const result = mergeFilters(JSON.parse(storedFilters), filters)      
-    return result
+  if (!isBrowser) return filters;
+  try {
+    const storedFilters = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (storedFilters) {
+      const result = mergeFilters(JSON.parse(storedFilters), filters)
+      return result
+    }
+  } catch (error) {
+    // ignore
   }
   return filters
 }
 
-const DEFAULT_FILTER_ITEMS_STORED = getStoredFilterValues(DEFAULT_FILTER_ITEMS);
-
 export const FilterProvider = ({ children }: { children: ReactNode }) => {
-  const [filters, setFilters] = useState<FilterItem[]>(DEFAULT_FILTER_ITEMS_STORED);
+  const [filters, setFilters] = useState<FilterItem[]>(() => getStoredFilterValues(DEFAULT_FILTER_ITEMS));
 
   const updateFiltersByContext = (
     context: string,
@@ -172,7 +176,9 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
       return newFilters;
     });
     const persisted = newFilters.filter((f) => f.persist);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persisted));
+    if (isBrowser) {
+      try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persisted)); } catch {}
+    }
 
     const filteredItems = newFilters.filter((f) => f.context === context);
     return getFiltersValuesFilters(filteredItems, omitVoidValues);
@@ -191,7 +197,9 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
       return newFilters;
     });
     const persisted = newFilters.filter((f) => f.persist);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persisted));
+    if (isBrowser) {
+      try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persisted)); } catch {}
+    }
   }
 
 const clearFilerItemByContext = (context: string, key: string) => {
@@ -228,8 +236,7 @@ export const useFilters = (filterContext: string) => {
 
   if (!context) throw new Error('useFilters must be used within FilterProvider');
 
-  const storedFilters = getStoredFilterValues(context.filters);
-  const defaultFilterValue = getFiltersValuesFilters(_.filter(storedFilters, { context: filterContext }));
+  const defaultFilterValue = getFiltersValuesFilters(_.filter(context.filters, { context: filterContext }));
 
   return { ...context, defaultFilterValue };
 };

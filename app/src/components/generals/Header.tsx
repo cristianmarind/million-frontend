@@ -1,6 +1,12 @@
 'use client'
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import _ from 'lodash';
+
+import { FilterFormData, mapFormDataToQuery, PROPERTY_FILTER_CONTEXT, useFilters } from "@/app/src/state/FiltersContext";
+import { toQueryParams } from "@/app/properties/PropertiesView";
+
 
 const menuItems = [
   { label: "Home", href: "/" },
@@ -10,6 +16,30 @@ const menuItems = [
 ];
 
 export default function Header() {
+  const router = useRouter();
+  const { filters } = useFilters(PROPERTY_FILTER_CONTEXT);
+
+  const goToPage = (href: string) => {    
+    if (href === "/properties") {
+      const contextFilter = _.filter(filters, { context: PROPERTY_FILTER_CONTEXT });
+      const newCurrentFilter: Partial<FilterFormData> = contextFilter.reduce((accum, item) => ({
+        ...accum,
+        [item.key]: item.value,
+      }), {});
+      
+      const query = mapFormDataToQuery(newCurrentFilter)
+      if (!_.isEmpty(query)) {
+        const queryParams = toQueryParams(query)
+        console.log({queryParams});
+        
+        router.push(`/properties?${queryParams}`);
+        return
+      }
+    }
+    
+      router.push(href);
+  }
+
   return (
     <header className="px-4 mx-0">
       <div className="row">
@@ -29,10 +59,12 @@ export default function Header() {
           <nav>
             <ul className="d-flex gap-4 mt-2 list-unstyled mb-0">
               {menuItems.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="text-decoration-none text-light">
-                    {item.label}
-                  </Link>
+                <li
+                  key={item.href}
+                  className="cursor-pointer"
+                  onClick={() => goToPage(item.href)}
+                >
+                  {item.label}
                 </li>
               ))}
             </ul>

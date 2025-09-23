@@ -15,7 +15,7 @@ import { DEFAULT_MAX_PRICE, FilterFormData, mapFormDataToQuery, mapQueryToFormDa
 import EmptyListMessage from "../src/components/generals/EmptyListMessage";
 import FilterValuesBadge from "../src/components/generals/FilterValuesBadge";
 
-function toQueryParams(obj: Record<string, any>) {
+export function toQueryParams(obj: Record<string, any>) {
   let availibleFilters: any = {}
   if (obj.minPrice === 0) {
     availibleFilters = _.omit(obj, 'minPrice');
@@ -59,13 +59,13 @@ export default function PropertiesView({
       if (!_.isEqual(currentFilters, newCurrentFilter)) {
         setCurrentFilters(newCurrentFilter);
         const query = mapFormDataToQuery(newCurrentFilter)
-        goToPage(0, query)
+        goToPage(query)
       }
     }
 
   }, [filters, currentFilters, isInitialized, searchParams])
 
-  const goToPage = (p: number, params: any = {}) => {
+  const goToPage = (params: any = {}) => {
     const queryParams = toQueryParams(params)
     router.push(`/properties?${queryParams}`);
   };
