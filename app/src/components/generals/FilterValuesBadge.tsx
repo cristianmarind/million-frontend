@@ -7,7 +7,6 @@ import clsx from "clsx";
 import { Badge } from "react-bootstrap";
 import { FilterFormDataStrings, LABEL_BY_KEY, useFilters } from "../../state/FiltersContext";
 
-
 export default function FilterValuesBadge({
   context,
 }: {
@@ -16,11 +15,20 @@ export default function FilterValuesBadge({
   const { filters, clearFilerItemByContext } = useFilters(context);
   const ref = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
+    // Verificar que estamos en el cliente y que IntersectionObserver está disponible
     if (typeof window === 'undefined' || !window.IntersectionObserver) {
       return;
     }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsSticky(!entry.isIntersecting);
@@ -35,16 +43,16 @@ export default function FilterValuesBadge({
     return () => {
       if (ref.current) observer.unobserve(ref.current);
     };
-  }, []);
+  }, [mounted]);
 
   const contextFilter = _.filter(filters, { context });
-
+  
   const currentFilters: Partial<FilterFormDataStrings> = contextFilter.reduce((accum, item) => {
     if (Array.isArray(item.value)) {
       if (_.every(item.value, _.isNil) || _.isEqual(item.value, item.defaultValue)) {
         return accum;
       }
-
+      
       return {
         ...accum,
         [item.key]: item.value.join(" - "),
@@ -61,6 +69,11 @@ export default function FilterValuesBadge({
 
   if (_.isEmpty(currentFilters)) {
     return null
+  }
+
+  // No renderizar nada hasta que esté montado en el cliente
+  if (!mounted) {
+    return null;
   }
 
   return (
@@ -83,10 +96,5 @@ export default function FilterValuesBadge({
         </div>
       </div>
     </>
-
   );
 }
-
-
-
-

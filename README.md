@@ -38,3 +38,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Sync DTOs con el backend .net c#
 npx openapi-typescript http://localhost:5119/swagger/v1/swagger.json --output app/src/core/infraestructure/dtos/internalApiTypes.ts
+
+## Remove Next.js Cache
+Remove-Item -Recurse -Force .next
