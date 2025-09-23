@@ -28,7 +28,7 @@ const settings = {
 
 export default function Footer() {
   return (
-    <div className="pb-5">
+    <div className="page-footer pb-5 mt-5">
       <div className="text-center">
         {settings.companyName}
       </div>
@@ -52,7 +52,7 @@ export default function Footer() {
             {
               settings.socialNetworks.map((item) => (
                 <li key={item.label} className="d-flex align-items-center">
-                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-light">
                     <item.icon style={{ width: '20px', height: '20px' }} />
                   </a>
                 </li>

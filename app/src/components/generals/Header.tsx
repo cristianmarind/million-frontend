@@ -18,6 +18,7 @@ export default function Header() {
           width={200}
           height={90}
           loading="eager"
+          className="h-auto"
         />
       </Link>
       
@@ -25,7 +26,7 @@ export default function Header() {
         <ul className="d-flex gap-4 mt-2 list-unstyled mb-0">
           {menuItems.map((item) => (
             <li key={item.href}>
-              <Link href={item.href} className="text-decoration-none">
+              <Link href={item.href} className="text-decoration-none text-light">
                 {item.label}
               </Link>
             </li>

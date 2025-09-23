@@ -3,7 +3,6 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
   ReactNode
 } from 'react';
 import _ from 'lodash';
@@ -22,6 +21,7 @@ export interface FiltersContextType {
   filters: FilterItem[];
   updateFiltersByContext: (context: string, updates: Record<string, any>, omitVoidValues?: boolean) => any;
   clearFilersByContext: (context: string) => void;
+  clearFilerItemByContext: (context: string, key: string) => void;
 }
 
 interface IdsFilterItem {
@@ -29,7 +29,7 @@ interface IdsFilterItem {
   context: string;
 }
 
-interface FilterFormData {
+export interface FilterFormData {
   propertyName?: string;
   propertyAddress?: string;
   propertyPrice?: [number, number]; // [minPrice, maxPrice]
@@ -42,11 +42,20 @@ interface QueryParams {
   maxPrice?: number;
 }
 
+export type FilterFormDataStrings = {
+  [K in keyof FilterFormData]: string;
+}
+
 const FiltersContext = createContext<FiltersContextType | undefined>(undefined);
 
 export const PROPERTY_FILTER_CONTEXT = "propertiesFilter"
 export const DEFAULT_MIN_PRICE = 0;
 export const DEFAULT_MAX_PRICE = 10000000;
+export const LABEL_BY_KEY: FilterFormDataStrings = {
+  propertyName: 'Nombre',
+  propertyAddress: 'Dirección/Ubicación',
+  propertyPrice: 'Precio'
+}
 export const DEFAULT_FILTER_ITEMS: FilterItem[] = [
   {
     key: 'propertyName',
@@ -176,12 +185,28 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persisted));
   }
 
+const clearFilerItemByContext = (context: string, key: string) => {
+    let newFilters: typeof filters = [];
+
+    setFilters((prev) => {
+      newFilters = prev.map((f) => {
+        if (areFilterItemsSame(f, { context, key })) return { ...f, value: f.defaultValue || "" };
+
+        return f;
+      });
+
+      return newFilters;
+    });
+    const persisted = newFilters.filter((f) => f.persist);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persisted));
+  }
   return (
     <FiltersContext.Provider
       value={{
         filters,
         updateFiltersByContext,
-        clearFilersByContext
+        clearFilersByContext,
+        clearFilerItemByContext
       }}
     >
       {children}

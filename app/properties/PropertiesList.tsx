@@ -10,9 +10,10 @@ import PropertyHeroCard from "../src/components/properties/PropertyHeroCard";
 import PropertyCategory from "../src/components/properties/PropertyCategory";
 import { getEnabledCategories } from "../src/utils/propertiesRender";
 import { Button } from "react-bootstrap";
-import PropertyFilterModal, { FilterFormData } from "../src/components/properties/PropertyFilterModal";
-import { DEFAULT_MAX_PRICE, mapFormDataToQuery, mapQueryToFormData, PROPERTY_FILTER_CONTEXT, useFilters } from "../src/state/FiltersContext";
+import PropertyFilterModal from "../src/components/properties/PropertyFilterModal";
+import { DEFAULT_MAX_PRICE, FilterFormData, mapFormDataToQuery, mapQueryToFormData, PROPERTY_FILTER_CONTEXT, useFilters } from "../src/state/FiltersContext";
 import EmptyListMessage from "../src/components/generals/EmptyListMessage";
+import FilterValuesBadge from "../src/components/generals/FilterValuesBadge";
 
 function toQueryParams(obj: Record<string, any>) {
   let availibleFilters: any = {}
@@ -54,14 +55,9 @@ export default function PropertiesList({
   useEffect(() => {
     if (!isInitialized) {
       const urlFilters = mapQueryToFormData(Object.fromEntries(searchParams.entries()))
-      console.log({urlFilters });
       updateFiltersByContext(PROPERTY_FILTER_CONTEXT, urlFilters)
       setIsInitialized(true)
-    }
-  }, [isInitialized, searchParams])
-
-  useEffect(() => {
-     if(isInitialized) {
+    } else {
       const contextFilter = _.filter(filters, { context: PROPERTY_FILTER_CONTEXT });
       const newCurrentFilter: Partial<FilterFormData> = contextFilter.reduce((accum, item) => ({
         ...accum,
@@ -74,7 +70,7 @@ export default function PropertiesList({
       }
     }
 
-  }, [filters, currentFilters, isInitialized])
+  }, [filters, currentFilters, isInitialized, searchParams])
 
   const goToPage = (p: number, params: any = {}) => {
     const queryParams = toQueryParams(params)
@@ -98,11 +94,8 @@ export default function PropertiesList({
           <PropertyHeroCard property={properties[0]} />
         )}
       </div>
-      <div className="px-5">
-
-        <div>BADGES</div>
-      </div>
       <div>
+        <FilterValuesBadge context={PROPERTY_FILTER_CONTEXT} />
         <div className="btn-properties-filter">
           <Button variant="light" onClick={() => setOpenFilters(!openFilters)}>
             <SlidersHorizontal style={{ width: '20px', height: '20px' }} />
@@ -121,28 +114,6 @@ export default function PropertiesList({
             rowProps={{}}
           />
         </div>
-      </div>
-
-      <div className="d-flex justify-content-between align-items-center mt-4">
-        <button
-          onClick={() => goToPage(page - 1)}
-          disabled={page <= 1}
-          className="btn btn-outline-secondary px-3 py-1"
-        >
-          Anterior
-        </button>
-
-        <span>
-          Página {page} de {totalPages}
-        </span>
-
-        <button
-          onClick={() => goToPage(page + 1)}
-          disabled={page >= totalPages}
-          className="btn btn-outline-secondary px-3 py-1"
-        >
-          Siguiente
-        </button>
       </div>
       {
         openFilters && (
