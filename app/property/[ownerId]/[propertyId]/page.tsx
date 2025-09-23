@@ -12,11 +12,11 @@ export const dynamicParams = true;
 export const revalidate = 86400;
 
 interface PropertyPageProps {
-  params: { ownerId: string; propertyId: string };
+  params: Promise<{ ownerId: string; propertyId: string }>;
 }
 
 export default async function PropertyPage({ params }: PropertyPageProps) {
-  const { ownerId, propertyId } = params;
+  const { ownerId, propertyId } = await params;
 
   const [owners, properties] = await Promise.all([
     GetOwnersByFilters.execute({ ownersId: [ownerId] }),

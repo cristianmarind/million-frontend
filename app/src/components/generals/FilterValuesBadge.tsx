@@ -18,6 +18,9 @@ export default function FilterValuesBadge({
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined' || !window.IntersectionObserver) {
+      return;
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsSticky(!entry.isIntersecting);
@@ -35,13 +38,13 @@ export default function FilterValuesBadge({
   }, []);
 
   const contextFilter = _.filter(filters, { context });
-  
+
   const currentFilters: Partial<FilterFormDataStrings> = contextFilter.reduce((accum, item) => {
     if (Array.isArray(item.value)) {
       if (_.every(item.value, _.isNil) || _.isEqual(item.value, item.defaultValue)) {
         return accum;
       }
-      
+
       return {
         ...accum,
         [item.key]: item.value.join(" - "),

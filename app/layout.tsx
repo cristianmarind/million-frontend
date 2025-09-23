@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import Header from "./src/components/generals/Header";
 import Footer from "./src/components/generals/Footer";
-import WhatsAppButton from "./src/components/generals/WhatsAppButton";
+import WhatsAppButtonWrapper from "./src/components/generals/WhatsAppButtonWrapper";
 import "./globals.css";
 import { FilterProvider } from "./src/state/FiltersContext";
 
@@ -28,20 +28,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <FilterProvider>
           <Header />
-          {children}
+          <main role="main" id="main-content">
+            {children}
+          </main>
           <Footer />
-          <WhatsAppButton />
+          <WhatsAppButtonWrapper />
         </FilterProvider>
-
       </body>
     </html>
   );

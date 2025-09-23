@@ -29,18 +29,22 @@ const settings = {
 
 export default function Footer() {
   return (
-    <div className="page-footer pb-5 mt-5">
+    <footer className="page-footer pb-5 mt-5" role="contentinfo">
       <div className="text-center text-gold">
-        {settings.companyName}
+        <h2 className="h5 mb-3">{settings.companyName}</h2>
       </div>
       <div className="d-flex justify-content-center">
-        <nav>
+        <nav aria-label="Información de contacto">
           <ul className="d-flex flex-column flex-md-row gap-4 mt-2 list-unstyled">
             {
               settings.basicInfo.map((item) => (
                 <li key={item.label} className="d-flex align-items-center">
-                  <item.icon className="me-2 text-gold" style={{ width: '20px', height: '20px' }} />
-                  {item.value}
+                  <item.icon 
+                    className="me-2 text-gold" 
+                    style={{ width: '20px', height: '20px' }}
+                    aria-hidden="true"
+                  />
+                  <span>{item.value}</span>
                 </li>
               ))
             }
@@ -48,13 +52,22 @@ export default function Footer() {
         </nav>
       </div>
       <div className="d-flex justify-content-center">
-        <nav>
+        <nav aria-label="Redes sociales">
           <ul className="d-flex gap-4 mt-2 list-unstyled">
             {
               settings.socialNetworks.map((item) => (
-                <li key={item.label} className="d-flex align-items-center">
-                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-light">
-                    <item.icon style={{ width: '20px', height: '20px' }} />
+                <li key={item.label}>
+                  <a 
+                    href={item.href} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-decoration-none text-light"
+                    aria-label={`Síguenos en ${item.label}`}
+                  >
+                    <item.icon 
+                      style={{ width: '20px', height: '20px' }}
+                      aria-hidden="true"
+                    />
                   </a>
                 </li>
               ))
@@ -62,6 +75,6 @@ export default function Footer() {
           </ul>
         </nav>
       </div>
-    </div>
+    </footer>
   );
 }

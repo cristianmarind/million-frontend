@@ -1,20 +1,28 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { List, RowComponentProps } from 'react-window';
 import _ from 'lodash';
 import { SlidersHorizontal } from 'lucide-react';
+import dynamic from 'next/dynamic';
 
 import Property from "../src/core/domain/Property";
 import PropertyHeroCard from "../src/components/properties/PropertyHeroCard";
 import PropertyCategory from "../src/components/properties/PropertyCategory";
 import { getEnabledCategories } from "../src/utils/propertiesRender";
 import { Button } from "react-bootstrap";
-import PropertyFilterModal from "../src/components/properties/PropertyFilterModal";
 import { DEFAULT_MAX_PRICE, FilterFormData, mapFormDataToQuery, mapQueryToFormData, PROPERTY_FILTER_CONTEXT, useFilters } from "../src/state/FiltersContext";
 import EmptyListMessage from "../src/components/generals/EmptyListMessage";
 import FilterValuesBadge from "../src/components/generals/FilterValuesBadge";
-import PropertiesNear from "../src/components/properties/PropertiesNear";
+
+// Lazy load heavy components
+const PropertyFilterModal = dynamic(() => import("../src/components/properties/PropertyFilterModal"), {
+  loading: () => null
+});
+
+const PropertiesNear = dynamic(() => import("../src/components/properties/PropertiesNear"), {
+  loading: () => <div className="d-flex justify-content-center p-3"><div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Cargando propiedades cercanas...</span></div></div>
+});
 
 export function toQueryParams(obj: Record<string, any>) {
   let availibleFilters: any = {}
@@ -96,17 +104,21 @@ export default function PropertiesView({
       <div>
         <FilterValuesBadge context={PROPERTY_FILTER_CONTEXT} />
         <div className="btn-properties-filter">
-          <Button variant="light" onClick={() => setOpenFilters(!openFilters)}>
-            <SlidersHorizontal style={{ width: '20px', height: '20px' }} />
-            {
-              " "
-            }
+          <Button 
+            variant="light" 
+            onClick={() => setOpenFilters(!openFilters)}
+            aria-label="Abrir filtros de propiedades"
+            aria-expanded={openFilters}
+          >
+            <SlidersHorizontal style={{ width: '20px', height: '20px' }} aria-hidden="true" />
             <span>Filtros</span>
           </Button>
         </div>
         <div className="mt-4 px-5">
           <div className="mb-5">
-            <PropertiesNear />
+            <Suspense fallback={<div className="d-flex justify-content-center p-3"><div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Cargando propiedades cercanas...</span></div></div>}>
+              <PropertiesNear />
+            </Suspense>
           </div>
           <List
             rowComponent={Row}

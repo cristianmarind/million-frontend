@@ -40,37 +40,39 @@ export default function Header() {
   }
 
   return (
-    <header className="px-4 mx-0">
+    <header className="px-4 mx-0" role="banner">
       <div className="row">
         <div className="col-12 col-md-4 mb-3 mt-1 d-flex align-items-center justify-content-center justify-content-md-start">
-          <Link href="/">
+          <Link href="/" aria-label="InDise - Ir al inicio">
             <Image
               src="/logo.avif"
-              alt="Casa moderna en la ciudad"
+              alt="Logo de InDise Arquitectura"
               loading="eager"
-              width={0}
-              height={0}
+              width={200}
+              height={60}
               sizes="200px"
-              style={{ width: "200px", height: "auto" }} 
+              priority
             />
           </Link>
         </div>
         <div className="col-12 col-md-8 mb-3 d-flex align-items-center justify-content-center justify-content-md-end">
-          <nav>
+          <nav role="navigation" aria-label="Navegación principal">
             <ul className="d-flex gap-4 mt-2 list-unstyled mb-0">
               {menuItems.map((item) => (
-                <li
-                  key={item.href}
-                  className="cursor-pointer"
-                  onClick={() => goToPage(item.href)}
-                >
-                  {item.label}
+                <li key={item.href}>
+                  <button
+                    className="btn btn-link text-decoration-none p-0 border-0 bg-transparent text-light"
+                    onClick={() => goToPage(item.href)}
+                    aria-label={`Ir a ${item.label}`}
+                    type="button"
+                  >
+                    {item.label}
+                  </button>
                 </li>
               ))}
             </ul>
           </nav>
         </div>
-
       </div>
     </header>
   );

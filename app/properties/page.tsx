@@ -3,7 +3,7 @@ import _ from "lodash";
 import BPromise from 'bluebird';
 
 import { GetPropertiesByFilters } from '../src/core/infraestructure/controllers/PropertiesController';
-import PropertiesList from "./PropertiesView";
+import PropertiesViewWrapper from "./PropertiesViewWrapper";
 import { mapSearchParamsToProperties } from './mappers';
 import { PROPERTY_CATEGORIES } from '../src/common/settings';
 import Property from '../src/core/domain/Property';
@@ -51,7 +51,7 @@ export default async function PropertiesPage({
 
   return (
     <div>
-      <PropertiesList
+      <PropertiesViewWrapper
         properties={properties}
       />
     </div>

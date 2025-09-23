@@ -20,20 +20,32 @@ export default function PropertyHeroCard({ property }: PropertyHeroCardProps) {
     <Card
       className="property-hero-card cursor-pointer bg-white shadow overflow-hidden position-relative border-0"
       onClick={goToPropertyPage}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          goToPropertyPage();
+        }
+      }}
+      aria-label={`Ver detalles de ${property.name} - ${property.address}`}
     >
       <Image
         src={property.imageUrls[0] || '/placeholder.jpg'}
-        alt={property.name}
-        width={0}
-        height={0}
-        sizes="100vw"
+        alt={`Imagen de ${property.name}`}
+        width={1200}
+        height={600}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
         className="hero-card-image"
-        style={{ width: '100%', height: 'auto', maxHeight: '70vh', objectFit: 'cover', objectPosition: 'center', boxShadow: '0 4px 8px rgba(0, 0, 0, 1)' }} // Responsive width and height
+        style={{ width: '100%', height: 'auto', maxHeight: '70vh', objectFit: 'cover', objectPosition: 'center', boxShadow: '0 4px 8px rgba(0, 0, 0, 1)' }}
         onError={(e) => {
           const img = e.target as HTMLImageElement;
           img.src = '/placeholder.jpg';
         }}
         loading="eager"
+        priority
+        placeholder="blur"
+        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
       />
       <Card.Body className="position-absolute bottom-0 end-0 text-dark bg-white p-3 rounded-3 m-3">
         <Card.Title className="h6 fw-bold mb-1">{property.name}</Card.Title>

@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Performance optimizations
+  experimental: {
+    optimizePackageImports: ['lodash', 'lucide-react', 'react-bootstrap'],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  // Enable compression
+  compress: true,
+  // Enable static optimization
+  trailingSlash: false,
   images: {
     remotePatterns: [
       {
@@ -14,10 +25,13 @@ const nextConfig: NextConfig = {
         pathname: '/photo-**',
       },
     ],
-    // Opciones adicionales para mejorar el manejo de imágenes
-    minimumCacheTTL: 60, // Cachea imágenes por al menos 60 segundos
-    disableStaticImages: false, // Habilita optimización de imágenes estáticas
-  },
+    // Optimized image settings
+    minimumCacheTTL: 31536000, // 1 year cache
+    disableStaticImages: false,
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  }
 };
 
 export default nextConfig;
