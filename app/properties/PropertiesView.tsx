@@ -103,7 +103,7 @@ export default function PropertiesView({
             rowComponent={Row}
             rowCount={enabledCategories.length}
             rowHeight={400}
-            overscanCount={2}
+            overscanCount={1}
             rowProps={{}}
           />
         </div>

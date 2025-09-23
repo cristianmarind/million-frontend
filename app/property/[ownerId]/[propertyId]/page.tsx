@@ -7,7 +7,6 @@ import { GetOwnersByFilters } from '@/app/src/core/infraestructure/controllers/O
 import { GetPropertiesByFilters } from '@/app/src/core/infraestructure/controllers/PropertiesController';
 import Owner from '@/app/src/core/domain/Owner';
 import Property from '@/app/src/core/domain/Property';
-import PropertyHeroCard from '@/app/src/components/properties/PropertyHeroCard';
 import PropertyView from './PropertyView';
 
 export const dynamicParams = true;
