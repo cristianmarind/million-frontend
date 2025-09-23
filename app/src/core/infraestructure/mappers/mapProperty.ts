@@ -5,6 +5,7 @@ import { mapPropertyTraces } from "./mapPropertyTraces";
 
 export function mapProperty(dto: components["schemas"]["PropertyDto"]): Property {
   return {
+    id: dto.id,
     name: dto.name,
     address: dto.address,
     category: dto.category,

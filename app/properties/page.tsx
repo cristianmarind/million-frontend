@@ -1,6 +1,7 @@
 import 'server-only'
 import { headers } from "next/headers";
 import _ from "lodash";
+import BPromise from 'bluebird';
 
 import { GetPropertiesByFilters } from '../src/core/infraestructure/controllers/PropertiesController';
 import PropertiesList from "./PropertiesList";
@@ -36,7 +37,7 @@ export default async function PropertiesPage({
   } else {
     // Si no se proporciona una categoría o es inválida, 
     // hace múltiples llamadas para cada categoría a la vez
-    const allCategories = await Promise.all(Object.keys(PROPERTY_CATEGORIES).map(async (categoryKey) => {
+    const allCategories = await BPromise.map(Object.keys(PROPERTY_CATEGORIES), async (categoryKey: string) => {
       const categoryNumber = Number(categoryKey);
       if (categoryNumber === 0 && longitude && latitude) {
         const nearResult = await GetPropertiesByFilters.execute({
@@ -47,7 +48,7 @@ export default async function PropertiesPage({
           pageSize: 2,
         });
 
-        return nearResult.map(item => ({ ...item, isNear: true }));
+        return nearResult.map((item: Property) => ({ ...item, isNear: true }));
       }
       
       const result = await GetPropertiesByFilters.execute({
@@ -57,7 +58,7 @@ export default async function PropertiesPage({
         pageSize: 4,
       });
       return result;
-    }));
+    }, { concurrency: 3 });
 
     properties = uniqByWithPriority(allCategories.flat(), 'name', 'isNear', true);
   }

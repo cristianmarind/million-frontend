@@ -1,6 +1,6 @@
 "use client"
 
-import UnderConstruction from "../src/components/generals/UnderConstruction";
+import UnderConstruction from "@/app/src/components/generals/UnderConstruction";
 
 export default function ContactUsPage() {
   return (

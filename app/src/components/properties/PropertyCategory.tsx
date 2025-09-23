@@ -22,7 +22,7 @@ const SLIDER_SETTINGS: Settings = {
   className: "justify-left",
   responsive: [
     {
-      breakpoint: 900,
+      breakpoint: 1000,
       settings: {
         slidesToShow: 2,
         slidesToScroll: 2,
@@ -30,7 +30,7 @@ const SLIDER_SETTINGS: Settings = {
       }
     },
     {
-      breakpoint: 520,
+      breakpoint: 768,
       settings: {
         slidesToShow: 1,
         slidesToScroll: 1
@@ -59,7 +59,7 @@ export default function PropertyCategory({
   };
 
   const goToCategoryPage = () => {
-    router.push(`/properties?page=1&pageSize=5&category=${category}`);
+    router.push(`/properties/categories/${category}`);
   };
 
   const propertiesToRender = properties

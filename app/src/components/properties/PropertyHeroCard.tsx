@@ -1,6 +1,8 @@
-// src/presentation/components/properties/PropertyHeroCard.tsx
+'use client'
 import Image from 'next/image';
 import Card from 'react-bootstrap/Card';
+import { useRouter } from "next/navigation";
+
 import Property from '../../core/domain/Property';
 
 interface PropertyHeroCardProps {
@@ -8,8 +10,17 @@ interface PropertyHeroCardProps {
 }
 
 export default function PropertyHeroCard({ property }: PropertyHeroCardProps) {
+  const router = useRouter();
+
+  const goToPropertyPage = () => {
+    router.push(`/property/${property.ownerId}/${property.id}`);
+  };
+
   return (
-    <Card className="property-hero-card bg-white shadow overflow-hidden position-relative border-0">
+    <Card
+      className="property-hero-card cursor-pointer bg-white shadow overflow-hidden position-relative border-0"
+      onClick={goToPropertyPage}
+    >
       <Image
         src={property.imageUrls[0] || '/placeholder.jpg'}
         alt={property.name}

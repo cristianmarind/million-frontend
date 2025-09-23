@@ -1,6 +1,7 @@
 import PropertyTrace from "./PropertyTrace";
 
 export default interface Property {
+    id: string;
     name: string;
     address: string;
     category: number;

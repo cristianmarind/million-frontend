@@ -13,6 +13,7 @@ export interface IGetPropertiesProperties {
     longitude?: number;
     latitude?: number;
     category?: number;
+    propertyId?: string;
 }
 
 export interface IRepositoryProperties {

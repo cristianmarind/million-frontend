@@ -115,8 +115,7 @@ export interface components {
             listClass: string;
         };
         PropertyDto: {
-            /** Format: uuid */
-            id?: string;
+            id: string;
             /** Format: int32 */
             category: number;
             name: string;
@@ -137,6 +136,7 @@ export interface components {
             value?: components["schemas"]["PropertyDto"][] | null;
         };
         PropertyFilterOptions: {
+            propertyId?: string | null;
             /** Format: int32 */
             category?: number | null;
             /** Format: double */

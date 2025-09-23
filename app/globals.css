@@ -6,12 +6,20 @@
 :root {
   --background: #171717;
   --foreground: #ffffff;
+  --gold: #e1a159;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.bg-gold {
+  background-color: var(--gold);
+}
+.text-gold {
+  color: var(--gold);
 }
 
 .wpp-button-msg {
@@ -34,7 +42,10 @@ body {
   display: block;
 }
 
-.property-hero-card::after {
+.property-hero-card, .property-view-images {
+  position: relative;
+}
+.property-hero-card::after, .property-view-images::after {
   content: "";
   width: 100%;
   height: 2em;
@@ -75,19 +86,16 @@ body {
   z-index: 100;
   width: fit-content;
   padding: 1em;
-  border-style: solid;
-  border-width: thin;
-  border-color: black;
-  border-radius: 1em;
-  background-color: var(--foreground);
 }
 .filter-badges.isSticky {
   border-radius: 0 0 1em 1em;
   border-top-width: 0;
-}
-
-.page-footer {
-  
+  border-right-width: thin;
+  border-bottom-width: thin;
+  border-left-width: thin;
+  border-style: solid;
+  border-color: black;
+  background-color: var(--foreground);
 }
 
 @keyframes hammer-hit {

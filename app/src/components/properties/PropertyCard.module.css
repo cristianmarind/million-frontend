@@ -1,0 +1,199 @@
+.wrapper {
+    width: min(1100px, 96%);
+    margin: 0 auto;
+    margin-top: -2.5rem; 
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    background: rgba(10,11,12,0.68);
+    color: #eee;
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6), inset 0 1px rgba(255,255,255,0.02);
+    backdrop-filter: blur(6px);
+    transition: transform 220ms ease, box-shadow 220ms ease;
+  }
+  
+  /* hover subtle pop on desktop */
+  @media (hover: hover) {
+    .wrapper:hover {
+      transform: translateY(-5vh);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.75);
+    }
+  }
+  
+  /* -- Owner row -- */
+  .ownerRow {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-bottom: 6px;
+  }
+  
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex: 0 0 64px;
+    border: 2px solid rgba(255,255,255,0.06);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  }
+  
+  /* small muted label and bold name */
+  .ownerLabel {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  
+  .ownerName {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #f3efe6; /* warm light color, pairs with gold accent */
+  }
+  
+  /* -- Main info -- */
+  .main {
+    padding: 0.25rem 0 0.75rem;
+  }
+  
+  .title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  
+  /* meta row: address left, price center/right */
+  .metaRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+  
+  .address {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.95rem;
+    min-width: 240px;
+  }
+  
+  .price {
+    margin-left: auto;
+    color: #b78f3f; /* gold accent */
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+  
+  .year {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+  }
+  
+  /* -- Traces / historial -- */
+  .tracesWrap {
+    margin-top: 0.9rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(255,255,255,0.03);
+  }
+  
+  .tracesHeader {
+    font-weight: 700;
+    margin-bottom: 0.45rem;
+    color: #fff;
+  }
+  
+  /* grid: event | value | tax | date */
+  .traces {
+    display: grid;
+    gap: 0.4rem;
+  }
+  
+  .traceRow {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 12px;
+    align-items: center;
+    padding: 0.55rem 0.5rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.005), rgba(255,255,255,0.003));
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.02);
+  }
+  
+  .traceEvent {
+    color: rgba(255,255,255,0.9);
+    font-size: 0.95rem;
+  }
+  
+  .traceValue,
+  .traceTax {
+    text-align: right;
+    font-weight: 700;
+    color: rgba(255,255,255,0.92);
+    white-space: nowrap;
+  }
+  
+  .traceDate {
+    text-align: right;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  
+  /* remove bottom radius on last trace for a flush card */
+  .traces .traceRow:last-child {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  
+  /* Responsive: collapse trace rows into stacked blocks on narrow screens */
+  @media (max-width: 720px) {
+    .wrapper {
+      padding: 0.9rem;
+    }
+  
+    .metaRow {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+  
+    .price {
+      margin-left: 0;
+    }
+  
+    .traceRow {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 0.7rem;
+    }
+  
+    .traceValue,
+    .traceTax,
+    .traceDate {
+      text-align: left;
+    }
+  
+    .traceValue::before {
+      content: "Value: ";
+      font-weight: 600;
+      margin-right: 6px;
+      color: rgba(255,255,255,0.7);
+    }
+    .traceTax::before {
+      content: "Tax: ";
+      font-weight: 600;
+      margin-right: 6px;
+      color: rgba(255,255,255,0.7);
+    }
+    .traceDate::before {
+      content: "Date: ";
+      font-weight: 600;
+      margin-right: 6px;
+      color: rgba(255,255,255,0.7);
+    }
+  }
+  

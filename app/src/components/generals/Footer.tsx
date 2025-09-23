@@ -1,3 +1,4 @@
+'use client'
 import { MapPinHouse, Mail, Smartphone, Facebook, Instagram, Linkedin } from "lucide-react";
 
 const settings = {
@@ -29,16 +30,16 @@ const settings = {
 export default function Footer() {
   return (
     <div className="page-footer pb-5 mt-5">
-      <div className="text-center">
+      <div className="text-center text-gold">
         {settings.companyName}
       </div>
       <div className="d-flex justify-content-center">
         <nav>
-          <ul className="d-flex gap-4 mt-2 list-unstyled">
+          <ul className="d-flex flex-column flex-md-row gap-4 mt-2 list-unstyled">
             {
               settings.basicInfo.map((item) => (
                 <li key={item.label} className="d-flex align-items-center">
-                  <item.icon className="me-2" style={{ width: '20px', height: '20px' }} />
+                  <item.icon className="me-2 text-gold" style={{ width: '20px', height: '20px' }} />
                   {item.value}
                 </li>
               ))
