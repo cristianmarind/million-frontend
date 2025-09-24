@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Header from "./src/components/generals/Header";
 import Footer from "./src/components/generals/Footer";
 import WhatsAppButtonWrapper from "./src/components/generals/WhatsAppButtonWrapper";
+import ErrorBoundary from "./src/components/generals/ErrorBoundary";
 import "./globals.css";
 import { FilterProvider } from "./src/state/FiltersContext";
 
@@ -37,14 +38,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <FilterProvider>
-          <Header />
-          <main role="main" id="main-content">
-            {children}
-          </main>
-          <Footer />
-          <WhatsAppButtonWrapper />
-        </FilterProvider>
+        <ErrorBoundary>
+          <FilterProvider>
+            <Header />
+            <main role="main" id="main-content">
+              {children}
+            </main>
+            <Footer />
+            <WhatsAppButtonWrapper />
+          </FilterProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

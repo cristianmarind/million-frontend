@@ -19,10 +19,23 @@ export default class PropertiesRepository implements IRepositoryProperties {
     }
 
     async fetchByFilterAsync(options: IGetPropertiesProperties): Promise<Property[]> {
-        const data = await this.client.fetchData(`properties/find`, options);
+        try {
+            const data = await this.client.fetchData(`properties/find`, options);
 
-        const properties = data as components["schemas"]["PropertyDto"][];
+            if (!data || !Array.isArray(data)) {
+                console.warn('PropertiesRepository: Received invalid data format', data);
+                return [];
+            }
 
-        return properties.map(mapProperty)
+            const properties = data as components["schemas"]["PropertyDto"][];
+
+            return properties.map(mapProperty);
+        } catch (error) {
+            console.error('PropertiesRepository: Error fetching properties', {
+                options,
+                error: error instanceof Error ? error.message : String(error)
+            });
+            return []; 
+        }
     }
 }

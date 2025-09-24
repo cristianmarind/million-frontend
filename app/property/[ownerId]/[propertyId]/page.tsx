@@ -7,6 +7,8 @@ import { GetPropertiesByFilters } from '@/app/src/core/infraestructure/controlle
 import Owner from '@/app/src/core/domain/Owner';
 import Property from '@/app/src/core/domain/Property';
 import PropertyView from './PropertyView';
+import { ApiError, NetworkError, ValidationError } from '@/app/src/core/infraestructure/clients/InternalApiClient';
+import ErrorMessage from '@/app/src/components/generals/ErrorMessage';
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -16,25 +18,50 @@ interface PropertyPageProps {
 }
 
 export default async function PropertyPage({ params }: PropertyPageProps) {
-  const { ownerId, propertyId } = await params;
+  try {
+    const { ownerId, propertyId } = await params;
 
-  const [owners, properties] = await Promise.all([
-    GetOwnersByFilters.execute({ ownersId: [ownerId] }),
-    GetPropertiesByFilters.execute({
-      propertyId,
-      page: 1,
-      pageSize: 1,
-    }),
-  ]);
+    if (!ownerId || !propertyId) {
+      notFound();
+    }
 
-  const owner: Owner = owners[0];
-  const property: Property = properties[0];
+    const [owners, properties] = await Promise.all([
+      GetOwnersByFilters.execute({ ownersId: [ownerId] }),
+      GetPropertiesByFilters.execute({
+        propertyId,
+        page: 1,
+        pageSize: 1,
+      }),
+    ]);
 
-  if (!owner || !property) {
+    const owner: Owner = owners[0];
+    const property: Property = properties[0];
+
+    if (!owner || !property) {
+      notFound();
+    }
+
+    return (
+      <PropertyView owner={owner} property={property} />
+    );
+  } catch (error) {
+    console.error('PropertyPage: Error loading property details', error);
+
+    if (error instanceof ValidationError) {
+      notFound();
+    }
+
+    if (error instanceof NetworkError || error instanceof ApiError) {
+      return (
+        <ErrorMessage
+          error="network"
+          onRetry={() => window.location.reload()}
+          showDetails={false}
+          className="py-5"
+        />
+      );
+    }
+
     notFound();
   }
-
-  return (
-    <PropertyView owner={owner} property={property} />
-  );
 }

@@ -19,12 +19,17 @@ export default class OwnersRepository implements IOwnerRepository {
     }
 
     async fetchByFilterAsync(options: IGetOwnersProperties): Promise<Owner[]> {
-        const data = await this.client.fetchData(`owners/find`, {
-            ownerIdList: options.ownersId
-        });
-
-        const owners = data as components["schemas"]["OwnerDto"][];
-
-        return owners.map(mapOwner)
+        try {
+            const data = await this.client.fetchData(`owners/find`, {
+                ownerIdList: options.ownersId
+            });
+    
+            const owners = data as components["schemas"]["OwnerDto"][];
+    
+            return owners.map(mapOwner)
+        } catch (error) {
+            console.error('OwnersRepository: Error fetching owners', error instanceof Error ? error.message : String(error));
+            return [];
+        }
     }
 }

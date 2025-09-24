@@ -21,7 +21,13 @@ const PropertyFilterModal = dynamic(() => import("../src/components/properties/P
 });
 
 const PropertiesNear = dynamic(() => import("../src/components/properties/PropertiesNear"), {
-  loading: () => <div className="d-flex justify-content-center p-3"><div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Cargando propiedades cercanas...</span></div></div>
+  loading: () => (
+    <div className="d-flex justify-content-center p-3">
+      <div className="spinner-border spinner-border-sm text-primary" role="status">
+        <span className="visually-hidden">Cargando propiedades cercanas...</span>
+      </div>
+    </div>
+  )
 });
 
 export function toQueryParams(obj: Record<string, any>) {
@@ -116,7 +122,13 @@ export default function PropertiesView({
         </div>
         <div className="mt-4 px-5">
           <div className="mb-5">
-            <Suspense fallback={<div className="d-flex justify-content-center p-3"><div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Cargando propiedades cercanas...</span></div></div>}>
+            <Suspense fallback={
+              <div className="d-flex justify-content-center p-3">
+                <div className="spinner-border spinner-border-sm text-primary" role="status">
+                  <span className="visually-hidden">Cargando propiedades cercanas...</span>
+                </div>
+              </div>
+            }>
               <PropertiesNear />
             </Suspense>
           </div>
