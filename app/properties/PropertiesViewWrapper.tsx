@@ -5,7 +5,6 @@ import { PropertiesLoadingSpinner } from '../src/components/generals/LoadingSpin
 import ErrorBoundary from '../src/components/generals/ErrorBoundary';
 import ErrorMessage from '../src/components/generals/ErrorMessage';
 
-// Lazy load the properties view to improve TTI
 const PropertiesView = dynamic(() => import("./PropertiesView"), {
   loading: () => <PropertiesLoadingSpinner />
 });

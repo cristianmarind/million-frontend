@@ -35,7 +35,7 @@ export default class PropertiesRepository implements IRepositoryProperties {
                 options,
                 error: error instanceof Error ? error.message : String(error)
             });
-            return []; 
+            throw error; // Re-throw to let the controller handle it
         }
     }
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useEffect, useState, useLayoutEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import _ from "lodash";
 import Slider, { Settings } from "react-slick";
@@ -11,32 +11,75 @@ import PropertyListCard from "./PropertyListCard";
 import { PROPERTY_CATEGORIES } from "../../common/settings";
 
 
-const SLIDER_SETTINGS: Settings = {
-  dots: true,
-  infinite: true,
-  lazyLoad: 'progressive',
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 3,
-  arrows: false,
-  className: "justify-left",
-  responsive: [
-    {
-      breakpoint: 1000,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-        initialSlide: 2
+// Hook personalizado para detectar el ancho de la ventana
+const useWindowWidth = () => {
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    // Establecer el ancho inicial
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowWidth;
+};
+
+// Función para obtener la configuración del slider basada en el ancho
+const getSliderSettings = (windowWidth: number): Settings => {
+  let initialSlidesToShow = 4; // Por defecto para pantallas grandes
+
+  if (windowWidth <= 768) {
+    initialSlidesToShow = 1;
+  } else if (windowWidth <= 992) {
+    initialSlidesToShow = 2;
+  } else if (windowWidth <= 1200) {
+    initialSlidesToShow = 3;
+  }
+
+  return {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: initialSlidesToShow,
+    slidesToScroll: 1,
+    arrows: false,
+    className: "justify-left",
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: false,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: false,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: false,
+          dots: true
+        }
       }
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1
-      }
-    }
-  ]
+    ]
+  };
 };
 
 
@@ -49,8 +92,12 @@ export default function PropertyCategory({
   category: number;
 }) {
   const router = useRouter();
-
   const sliderRef = useRef<Slider | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const windowWidth = useWindowWidth();
+  
+  // Obtener la configuración del slider basada en el ancho de la ventana
+  const sliderSettings = useMemo(() => getSliderSettings(windowWidth), [windowWidth]);
   const goToNextSlide = () => {
     sliderRef.current?.slickNext();
   };
@@ -62,13 +109,29 @@ export default function PropertyCategory({
     router.push(`/properties/categories/${category}`);
   };
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Solo forzar recalculación cuando cambie el ancho de la ventana
+  useEffect(() => {
+    if (mounted && sliderRef.current && windowWidth > 0) {
+      const timer = setTimeout(() => {
+        if (sliderRef.current) {
+          sliderRef.current.slickGoTo(0);
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [mounted, windowWidth]);
+
   const propertiesToRender = properties
     .filter(p =>
       p.category === category || (p.isNear && category === 0)
     );
 
   if (_.isEmpty(propertiesToRender)) {
-    return null; // Renderizar msg no hay
+    return null;
   }
 
   return (
@@ -88,24 +151,24 @@ export default function PropertyCategory({
           </button>
         </div>
       </div>
-      <Slider
-        ref={sliderRef}
-        {...SLIDER_SETTINGS}
-      >
-        {
-          propertiesToRender
-            .map((property) => (
-              <div key={property.name}>
-                <PropertyListCard property={property} />
-              </div>
-            ))
-        }
-      </Slider>
+      <div style={{ width: '100%', overflow: 'hidden' }}>
+        {mounted && (
+          <Slider
+            ref={sliderRef}
+            {...sliderSettings}
+          >
+            {
+              propertiesToRender
+                .map((property) => (
+                  <div key={property.name} style={{ padding: '0 10px' }}>
+                    <PropertyListCard property={property} />
+                  </div>
+                ))
+            }
+          </Slider>
+        )}
+      </div>
 
     </div>
   );
 }
-
-
-
-

@@ -18,7 +18,7 @@ export default function EmptyListMessage({
   return (
     <div className="d-flex flex-column align-items-center">
       <div className="d-flex justify-content-center align-items-center mb-2">
-        <CircleAlert color="red" className="me-2" style={{ width: '20px', height: '20px' }} />
+        <CircleAlert className="me-2" style={{ width: '20px', height: '20px' }} />
         No hay datos con los filtros aplicados
       </div>
       <Button variant="light" onClick={onClearFilter}>Limpiar filtros</Button>

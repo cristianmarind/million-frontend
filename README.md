@@ -41,3 +41,10 @@ npx openapi-typescript http://localhost:5119/swagger/v1/swagger.json --output ap
 
 ## Remove Next.js Cache
 Remove-Item -Recurse -Force .next
+
+
+# 1. Instalar dependencias (maneja compatibilidad React 19)
+npm run setup-tests
+
+# 2. Ejecutar todas las pruebas
+npm test

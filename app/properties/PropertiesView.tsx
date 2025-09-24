@@ -15,7 +15,6 @@ import { DEFAULT_MAX_PRICE, FilterFormData, mapFormDataToQuery, mapQueryToFormDa
 import EmptyListMessage from "../src/components/generals/EmptyListMessage";
 import FilterValuesBadge from "../src/components/generals/FilterValuesBadge";
 
-// Lazy load heavy components
 const PropertyFilterModal = dynamic(() => import("../src/components/properties/PropertyFilterModal"), {
   loading: () => null
 });

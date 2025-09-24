@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "analyze": "cross-env ANALYZE=true next build",
-    "lighthouse": "lighthouse http://localhost:3000 --output html --output-path ./lighthouse-report.html"
+    "lighthouse": "lighthouse http://localhost:3000 --output html --output-path ./lighthouse-report.html",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "setup-tests": "node setup-tests.js"
   },
   "dependencies": {
     "@types/bluebird": "^3.5.42",
@@ -35,6 +39,12 @@
     "@types/react-dom": "^19",
     "@types/react-slick": "^0.23.13",
     "@types/react-window": "^2.0.0",
+    "@types/jest": "^29.5.12",
+    "@testing-library/react": "^15.0.0",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/user-event": "^14.5.2",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "typescript": "^5"
   }
 }
